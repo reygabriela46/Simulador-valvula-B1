@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07131f"><title>B1 · Material Selection Lab</title><link rel="stylesheet" href="/style.css"></head>
+<body>
+  <div class="topbar">
+    <div class="brand"><div class="brandicon">⌬</div><div><strong>MAT<span class="mint">SELECT</span></strong><small>OFFSHORE INTEGRITY LAB</small></div></div>
+    <div class="toplinks"><a href="#materiales">Componentes</a><a href="#comparacion">Comparador</a><a href="#normativa">Normas</a></div>
+    <div class="online"><span class="dot"></span><span id="connection">Motor Python conectado</span></div>
+  </div>
+  <div class="dashboard">
+    <aside class="sidebar">
+      <div class="sidebarhead"><div><div class="eyebrow">CONFIGURACIÓN / 01</div><h2>Condiciones de servicio</h2></div><span class="smallindex">B1</span></div>
+      <p class="sideintro">Edita una variable y la selección se recalculará automáticamente.</p>
+      <div class="fieldgroup"><div class="groupname"><span>01</span> PRESIÓN Y COMPOSICIÓN</div>
+        <label for="presion">Presión de operación <em>bar</em></label><input type="number" id="presion" min="0" step="5" value="265" data-prop="presion">
+        <div class="seg" id="tipo-presion"><button class="active" type="button" data-pres="absoluta">Absoluta · bar(a)</button><button type="button" data-pres="manometrica">Manométrica · bar(g)</button></div>
+        <label for="referencia">Presión de referencia <em>bar</em></label><input type="number" id="referencia" min="0.1" value="320" data-prop="referencia">
+        <div class="twofields"><div><label for="h2s_valor">H₂S</label><select id="h2s_modo"><option value="mol">% mol</option><option value="parcial">bar parcial</option></select><input type="number" min="0" max="100" step="0.1" id="h2s_valor" value="1.4" data-prop="h2s_valor"></div>
+          <div><label for="co2_valor">CO₂</label><select id="co2_modo"><option value="mol">% mol</option><option value="parcial">bar parcial</option></select><input type="number" min="0" max="100" step="0.1" id="co2_valor" value="1.8" data-prop="co2_valor"></div></div>
+      </div>
+      <div class="fieldgroup"><div class="groupname"><span>02</span> QUÍMICA Y TEMPERATURA</div>
+        <div class="twofields"><div><label for="ph">pH condensado</label><input type="number" min="0" max="14" step="0.1" id="ph" value="3.9" data-prop="ph"></div><div><label for="t_max">Temperatura máx. <em>°C</em></label><input type="number" min="-50" max="300" step="5" id="t_max" value="120" data-prop="t_max"></div></div>
+        <label for="t_operacion">Temperatura habitual <em>°C</em></label><input type="number" min="-50" max="300" step="5" id="t_operacion" value="95" data-prop="t_operacion">
+        <label for="cloruros_formacion">Cloruros del agua de formación <em>mg/L · desde año 8</em></label><input type="number" min="0" step="1000" id="cloruros_formacion" value="28000" data-prop="cloruros_formacion">
+      </div>
+      <div class="fieldgroup"><div class="groupname"><span>03</span> DATOS METALÚRGICOS DEL LOTE</div>
+        <p class="sideintro">En blanco = desconocido. Para 4130 se usa el criterio <b>22 HRC del escenario B1</b>, no un límite universal ISO.</p>
+        <label for="dureza_4130_hrc">Dureza 4130 <em>HRC (opcional)</em></label><input type="number" id="dureza_4130_hrc" min="0" max="80" step="0.5" placeholder="Sin medir" data-prop="dureza_4130_hrc">
+        <div class="twofields"><div><label for="dureza_pernos_hrc">Dureza pernos <em>HRC</em></label><input type="number" id="dureza_pernos_hrc" min="0" max="80" step="0.5" placeholder="Sin dato" data-prop="dureza_pernos_hrc"></div>
+        <div><label for="dureza_tuercas_hrc">Dureza tuercas <em>HRC</em></label><input type="number" id="dureza_tuercas_hrc" min="0" max="80" step="0.5" placeholder="Sin dato" data-prop="dureza_tuercas_hrc"></div></div>
+        <div class="checks"><label class="check"><input type="checkbox" id="tratamiento_documentado" data-prop="tratamiento_documentado"> Tratamiento térmico documentado</label>
+        <label class="check"><input type="checkbox" id="propiedades_mecanicas_documentadas" data-prop="propiedades_mecanicas_documentadas"> Datos mecánicos y carga de apriete documentados</label></div>
+      </div>
+      <div class="fieldgroup"><div class="groupname"><span>04</span> TIEMPO Y EXPOSICIÓN</div>
+        <label for="anio">Año de servicio <em><strong id="year-number">0</strong> / 25</em></label>
+        <input class="timeslider" type="range" id="anio" min="0" max="25" value="0" step="0.5" data-prop="anio"><div class="sliderlabels"><span>0 años</span><span>8 · Cloruros</span><span>25 años</span></div>
+        <label for="exposure">Espárragos y tuercas · exterior</label><select id="exposure" data-prop="exposure"><option>Atmósfera marina</option><option>Protegida/seca</option><option>Salpicadura / inmersión</option></select>
+        <div class="checks"><label class="check"><input type="checkbox" id="contacto_agua" data-prop="contacto_agua" checked> Presencia de fase acuosa en el interior</label>
+          <label class="check"><input type="checkbox" id="contacto_produccion_tornillos" data-prop="contacto_produccion_tornillos"> Tornillería en contacto con fluido producido</label>
+          <label class="check"><input type="checkbox" id="recubrimiento_externo" data-prop="recubrimiento_externo" checked> Protección externa de tornillería prevista</label>
+          <label class="check"><input type="checkbox" id="overlay_confirmado" data-prop="overlay_confirmado"> Continuidad del overlay 625 documentada</label>
+          <label class="check"><input type="checkbox" id="usar_tmin"> Incluir temperatura mínima transitoria</label></div>
+        <div id="minwrap" hidden><label for="temperatura_min">Temperatura mínima <em>°C</em></label><input type="number" id="temperatura_min" min="-100" max="100" step="5" value="-10"></div>
+      </div>
+      <div class="sidenote"><strong>BASE DE DISEÑO · B1</strong><p>Gas y condensado · Caribe colombiano · vida de diseño 25 años. Las condiciones del año 0–8 <b>no implican</b> cloruros igual a cero.</p></div>
+    </aside>
+    <main class="content">
+      <div class="hero"><div class="herobody"><span class="eyebrow">INGENIERÍA DE MATERIALES <span class="slash">/</span> VÁLVULA MAESTRA</span><h1>Material Selection <span>Dashboard</span></h1><p>Componentes <b>07</b> y <b>08</b> · selección dinámica en servicio agrio, alta presión y ambiente marino.</p><div class="heropills"><span class="chip">ISO 15156</span><span class="chip">ISO 21457</span><span class="chip">API 6A</span><span class="chip muted">Cribado académico</span></div></div><div class="heroshape"><div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div><div class="core">B1</div></div></div>
+      <div class="error" id="error" hidden></div>
+      <section class="section"><div class="sectionhead"><div><span class="eyebrow">SALIDA EN TIEMPO REAL / 02</span><h2>Parámetros calculados</h2></div><span id="updated" class="date">Cálculo automático</span></div>
+        <div class="metrics"><div class="metric"><span>Presión absoluta</span><strong id="metric-pabs">265,00</strong><small>bar(a)</small></div><div class="metric"><span>Presión parcial H₂S</span><strong id="metric-h2s">3,710</strong><small>bar</small></div><div class="metric"><span>Presión parcial CO₂</span><strong id="metric-co2">4,770</strong><small>bar</small></div><div class="metric"><span>Cloruros internos</span><strong id="metric-cl">No determinado</strong><small>mg/L</small></div></div>
+        <div class="formula"><b>MODELO:</b> pᵢ = yᵢ × P absoluta · supuesto gas ideal. <span id="gascomp"></span></div>
+      </section>
+      <section class="section" id="materiales"><div class="sectionhead"><div><span class="eyebrow">SELECCIÓN / 03</span><h2>Material recomendado por componente</h2></div><span class="legend"><i></i> Recomendación condicionada</span></div>
+        <div class="cards" id="cards"></div><p class="tiny">La prioridad se calcula con una política de comparación explicada en el informe. No es una aprobación de material, ni una velocidad de corrosión ni una predicción de vida útil.</p></section>
+      <section class="section timeline-section"><div class="sectionhead"><div><span class="eyebrow">EVOLUCIÓN DEL ESCENARIO / 04</span><h2>Línea de tiempo ambiental</h2></div><div class="yearbadge" id="badge-year">AÑO 0</div></div>
+        <div class="timeline"><div class="track"><div class="trackprogress" id="trackprogress"></div><div class="event" title="Ingreso de agua de formación">8</div><div class="locator" id="locator"></div></div><div class="years"><span>AÑO 0</span><span>AÑO 8</span><span>AÑO 25</span></div></div>
+        <div class="envbox" id="envbox"><strong>Cloruros previos no determinados</strong><p>Antes del año 8, el escenario no cuantifica cloruros del agua condensada. No se toma como 0 mg/L.</p></div>
+      </section>
+      <section class="section" id="comparacion"><div class="sectionhead"><div><span class="eyebrow">CRIBADO COMPARATIVO / 05</span><h2>Evaluación de alternativas</h2></div><div class="piecepicker"><label for="focus-piece">Ver pieza:</label><select id="focus-piece"><option value="cuerpo">07 · Cuerpo</option><option value="bonete">07 · Bonete</option><option value="espárragos">08 · Espárragos</option><option value="tuercas">08 · Tuercas</option></select></div></div>
+        <div class="tablewrap"><table><thead><tr><th>Material candidato</th><th>Estado</th><th>Prioridad*</th><th>Limitación</th></tr></thead><tbody id="compare-body"></tbody></table></div>
+        <div id="details" class="details"></div><div id="failures" class="failures"></div><p class="tiny">* Índice de priorización cualitativo. Su escala no proviene de ISO/API y no equivale a una propiedad física. Ningún material se aprueba automáticamente sin evidencia de producto.</p>
+      </section>
+      <section class="section" id="normativa"><div class="sectionhead"><div><span class="eyebrow">TRAZABILIDAD / 06</span><h2>Normas y alcance de la decisión</h2></div></div>
+        <div class="normgrid"><div class="norm"><b>ISO 15156-2:2020</b><p>§7.1 y §7.3 · criterios para aceros en presencia de H₂S y dureza. §8 · HIC. El valor de 0,3 kPa es condición de cribado, no una homologación.</p></div><div class="norm"><b>ISO 15156-3:2020</b><p>Anexo A · aleaciones resistentes al agrietamiento. No garantiza resistencia a corrosión general o localizada.</p></div><div class="norm"><b>API 6A:2004</b><p>§10.3.3 y tabla 49 · tornillería expuesta y no expuesta, clase térmica, dimensión y rating. Edición histórica del material recibido.</p></div><div class="norm"><b>ISO 21457:2010</b><p>§6 · evaluación de corrosión y selección para equipos desde cabezal y transporte de producción, durante el ciclo de diseño.</p></div></div>
+        <div class="norm statuslegend"><b>Clasificación de evidencias</b><p><span class="status">Pendiente de verificación</span> Propuesta preliminar; faltan límites documentados del material y el equipo.</p><p><span class="status red">Excede criterio comprobado</span> Solo ante restricción contrastable (por ejemplo, B7 para servicio agrio expuesto, o 4130 por encima de 22 HRC del escenario).</p><p><span class="status">Compatible con límites verificados</span> Estado reservado: no se declara sin documentos del lote, tabla y rating verificados.</p></div><p class="tiny">Revisar clase de material, PSL, temperatura mínima, espesor, resistencias de prueba, dureza real y tratamientos térmicos contra certificados del fabricante. La selección final requiere ingeniería y revisión documental.</p>
+      </section>
+      <section class="section export"><div><span class="eyebrow">ENTREGABLE / 07</span><h2>Informe técnico de evaluación</h2><p>Genera un PDF o un JSON con las condiciones actuales, selección de las cuatro piezas, mecanismos, alternativas y pendientes.</p></div><div class="buttons"><button type="button" class="primary" id="export-pdf">↓ Exportar informe PDF</button><button type="button" class="secondary" id="export-json">↓ Datos JSON</button></div></section>
+      <footer>UNIVERSIDAD / ESCENARIO B1 · HERRAMIENTA ACADÉMICA DE APOYO · SIN VALIDEZ DE CERTIFICACIÓN <span>Powered by Python</span></footer>
+    </main>
+  </div>
+  <script src="/app.js" defer></script>
+</body></html>
