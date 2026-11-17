@@ -1,0 +1,63 @@
+/* =====================================================================
+   animacion.css — Colores y movimiento del dibujo de cada pieza
+   ===================================================================== */
+:root {
+  --a-gas: #F4EBC9;  --a-meg: #F6DCE6;  --a-mar: #BFE0E8;
+  --a-anular: #DDE6E2;  --a-fuera: #E3E8EA;  --a-roca: #D2BE95;  --a-seco: #F1F4F5;
+  --a-h2s: #C9A400;  --a-co2: #6F7C85;  --a-agua: #2E86C1;  --a-sal: #2E9E6B;  --a-megp: #C2457A;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --a-gas: #3E3920;  --a-meg: #46283A;  --a-mar: #17475A;
+    --a-anular: #24353A;  --a-fuera: #22313A;  --a-roca: #4D4229;  --a-seco: #1B2B33;
+    --a-h2s: #F1CF3B;  --a-co2: #B4C0C8;  --a-agua: #62B4EA;  --a-sal: #5FD39C;  --a-megp: #F08AB8;
+  }
+}
+
+.anim { display: block; width: 100%; height: auto; border-radius: 4px; background: var(--a-seco); }
+.m-gas { fill: var(--a-gas); }   .m-meg { fill: var(--a-meg); }   .m-mar { fill: var(--a-mar); }
+.m-anular { fill: var(--a-anular); }  .m-fuera { fill: var(--a-fuera); }  .m-roca { fill: var(--a-roca); }  .m-seco { fill: var(--a-seco); }
+
+.rot-medio { font: 600 10.5px var(--texto); fill: var(--tinta); opacity: 0.8; }
+.rot-capa { font: 600 11px var(--texto); fill: var(--tinta); text-anchor: middle; }
+.rot-inserto { font: 600 10px var(--texto); fill: var(--tinta); text-anchor: end; paint-order: stroke; stroke: var(--a-gas); stroke-width: 3px; }
+.capa-mat { stroke: none; }
+.capa-mat.apagada { opacity: 0.55; }
+.marco { fill: none; stroke: var(--tinta); stroke-width: 1.2; }
+.grano { fill: #7d776a; opacity: 0.6; }
+.ola { fill: none; stroke: var(--panel); stroke-width: 1.5; opacity: 0.6; stroke-dasharray: 14 8; animation: ola 3s linear infinite; }
+
+/* partículas */
+.pt.h2s { fill: var(--a-h2s); }  .pt.co2 { fill: var(--a-co2); }  .pt.agua { fill: var(--a-agua); }
+.pt.sal { fill: var(--a-sal); }  .pt.meg { fill: var(--a-megp); }
+.pt.entra  { animation: entra var(--d, 3s) linear var(--r, 0s) infinite; }
+.pt.rebota { animation: rebota var(--d, 3s) ease-in-out var(--r, 0s) infinite; }
+.pt.baja   { animation: baja var(--d, 4s) linear var(--r, 0s) infinite; }
+.pt.chorro { animation: chorro 1.4s linear infinite; }
+
+/* daño */
+.grieta { fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: rajar 3.2s ease-in var(--r, 0s) infinite; }
+.grieta.dos { stroke-width: 2; animation-delay: 0.8s; }
+.grieta.corta { stroke-width: 1.6; animation-duration: 4s; }
+.comido { animation: carcome 2.4s ease-in-out infinite; }
+.late { transform-box: fill-box; transform-origin: center; animation: late 2.6s ease-in-out var(--r, 0s) infinite; }
+.oxido { fill: #B5651D; opacity: 0.85; }
+.migaja { fill: #8d877a; animation: cae 3s ease-in var(--r, 0s) infinite; }
+.fuga path { fill: none; stroke: var(--no); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; animation: fuga 1s ease-in-out infinite; }
+.fuga text { font: 700 12px var(--titulos); fill: var(--no); }
+
+@keyframes entra  { 0% { transform: translateX(0); opacity: 0; } 12% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translateX(118px); opacity: 0; } }
+@keyframes rebota { 0% { transform: translateX(0); opacity: 0; } 12% { opacity: 1; } 50% { transform: translateX(102px); } 88% { opacity: 1; } 100% { transform: translateX(0); opacity: 0; } }
+@keyframes baja   { from { transform: translateY(0); } to { transform: translateY(132px); } }
+@keyframes chorro { from { transform: translateX(0); opacity: 1; } to { transform: translateX(var(--w, 40px)); opacity: 0.2; } }
+@keyframes rajar  { 0% { stroke-dashoffset: 1; } 55%, 90% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: 0; opacity: 0; } }
+@keyframes carcome { 0%, 100% { opacity: 1; } 50% { opacity: 0.82; } }
+@keyframes late   { 0%, 100% { transform: scale(0.75); } 50% { transform: scale(1.1); } }
+@keyframes cae    { 0% { transform: translate(0, 0); opacity: 1; } 100% { transform: translate(-22px, 60px); opacity: 0; } }
+@keyframes fuga   { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(6px); } }
+@keyframes ola    { to { stroke-dashoffset: -44; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .anim * { animation: none !important; }
+  .grieta { stroke-dashoffset: 0; }
+}
