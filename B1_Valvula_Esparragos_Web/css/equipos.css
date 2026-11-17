@@ -1,0 +1,82 @@
+/* =====================================================================
+   equipos.css — Colores y movimiento del dibujo realista de cada equipo
+   ===================================================================== */
+.equipo-svg { display: block; width: 100%; height: auto; border-radius: 6px; background: var(--a-seco); }
+
+/* fondos */
+.eq-agua     { fill: var(--a-mar); }
+.eq-cielo    { fill: var(--cielo); }
+.eq-seco     { fill: var(--a-seco); }
+.eq-anular   { fill: var(--a-anular); }
+.eq-gasfondo { fill: var(--a-gas); }
+.eq-megfondo { fill: var(--a-meg); }
+.eq-hueco    { fill: var(--a-fuera); }
+.eq-roca     { fill: var(--a-roca); }
+.eq-suelo    { fill: var(--lecho); }
+.eq-grano    { fill: var(--tinta); opacity: 0.22; }
+.eq-fantasma { fill: var(--na); fill-opacity: 0.28; stroke: var(--tinta2); stroke-width: 1.5; stroke-dasharray: 6 4; }
+.eq-planta rect, .eq-planta path { fill: var(--na); stroke: var(--na); opacity: 0.55; }
+.eq-ola { fill: none; stroke: var(--panel); stroke-width: 2; opacity: 0.55; stroke-dasharray: 16 9; animation: ola 3s linear infinite; }
+.eq-limite { stroke: var(--tinta); stroke-width: 1.5; stroke-dasharray: 7 5; fill: none; opacity: 0.7; }
+.eq-chispa { fill: none; stroke: var(--cond); stroke-width: 3; stroke-linejoin: round; animation: parpadea 1.4s steps(2) infinite; }
+
+/* tubos dibujados con trazo */
+.eq-tubo   { fill: none; stroke: #6d7a83; stroke-width: 26; stroke-linejoin: round; }
+.eq .eq-tubo.s { stroke: #6d7a83; stroke-width: 22; paint-order: stroke; filter: drop-shadow(0 0 0 var(--st)); }
+.eq-brillo { fill: none; stroke: #dfe6ea; stroke-width: 6; opacity: 0.55; stroke-linejoin: round; pointer-events: none; }
+.eq-tubito { fill: none; stroke: #8496a2; stroke-width: 7; }
+.eq-cable  { stroke: #3a4249; stroke-width: 4; fill: none; }
+.eq-resorte { fill: none; stroke: #4a555d; stroke-width: 3; stroke-linejoin: round; }
+
+/* piezas: el borde lleva el color del estado */
+.eq { cursor: pointer; }
+.eq .s { stroke: var(--st, var(--tinta)); stroke-width: 2.6; stroke-linejoin: round; }
+.eq .eq-cable.s { stroke: var(--st, #3a4249); stroke-width: 4; }
+.eq .eq-tubo.s { stroke-width: 22; stroke: #6d7a83; filter: drop-shadow(0 0 2.5px var(--st)) drop-shadow(0 0 2.5px var(--st)); }
+.eq.st-no .s { animation: alarmaEq 1.1s ease-in-out infinite; }
+.eq:hover, .eq.foco { filter: brightness(1.18); }
+
+/* rótulos */
+.eq-tag { cursor: pointer; }
+.eq-tag text { font: 600 13px var(--texto); fill: var(--tinta); paint-order: stroke; stroke: var(--panel); stroke-width: 3.5px; stroke-opacity: 0.8; }
+.eq-tag:hover text, .eq-tag.foco text { text-decoration: underline; }
+.eq-guia { stroke: var(--tinta); stroke-width: 1.1; fill: none; opacity: 0.65; }
+.eq-pt { fill: var(--st, var(--tinta)); stroke: var(--panel); stroke-width: 2; }
+.eq-tag.st-no .eq-pt { animation: late 1.1s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.eq-nota { font: 400 12px var(--texto); fill: var(--tinta); opacity: 0.8; paint-order: stroke; stroke: var(--panel); stroke-width: 3px; stroke-opacity: 0.6; }
+
+/* partículas */
+.eq-part { pointer-events: none; }
+.eq-h2s { fill: var(--a-h2s); }  .eq-co2 { fill: var(--a-co2); }  .eq-megp { fill: var(--a-megp); }
+.eq-sal { fill: var(--a-sal); display: none; }
+.equipo-svg.con-sal .eq-sal { display: inline; }
+.equipo-svg.sin-h2s .eq-h2s { fill: var(--a-agua); }
+.eq-gota { fill: var(--panel); animation: salpica 1.6s ease-out var(--r, 0s) infinite; }
+
+/* partes móviles */
+.eq-flapper   { transform-box: view-box; transform-origin: 396px 256px; animation: flapper 7s ease-in-out infinite; }
+.eq-compuerta { animation: compuerta 6s ease-in-out infinite; }
+.eq-compuerta.lado  { animation-name: compuertaLado; }
+.eq-compuerta.lento { animation-duration: 9s; animation-name: compuertaTrim; }
+.eq-bola      { transform-box: view-box; transform-origin: 340px 240px; animation: bola 9s ease-in-out infinite; }
+.eq-goma      { transform-box: fill-box; transform-origin: center; animation: goma 4s ease-in-out infinite; }
+
+@keyframes flapper       { 0%, 12% { transform: rotate(0deg); } 30%, 82% { transform: rotate(-84deg); } 100% { transform: rotate(0deg); } }
+@keyframes compuerta     { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+@keyframes compuertaLado { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-10px); } }
+@keyframes compuertaTrim { 0%, 20%, 100% { transform: translateY(0); } 55%, 70% { transform: translateY(-34px); } }
+@keyframes bola          { 0%, 25%, 100% { transform: rotate(0deg); } 55%, 70% { transform: rotate(32deg); } }
+@keyframes goma          { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(0.975); } }
+@keyframes alarmaEq      { 0%, 100% { stroke-width: 2.6; } 50% { stroke-width: 6; } }
+@keyframes parpadea      { 0% { opacity: 1; } 100% { opacity: 0.15; } }
+@keyframes salpica       { 0% { transform: translateY(0); opacity: 0.9; } 100% { transform: translateY(-46px); opacity: 0; } }
+
+/* panel del equipo y destello de la tarjeta elegida */
+.equipo .pie { margin-top: 8px; }
+.tarjeta.destello { animation: destello 1.2s ease-out; }
+@keyframes destello { 0% { box-shadow: 0 0 0 6px var(--acento); } 100% { box-shadow: 0 0 0 0 transparent; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .equipo-svg *, .tarjeta.destello { animation: none !important; }
+  .eq-part { display: none; }
+}
